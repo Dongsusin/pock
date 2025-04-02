@@ -177,76 +177,54 @@ main {
   height: 100vh;
   background-color: #2b2b2b !important;
 }
-#slider .slider__wrap {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#slider .slider__img {
-  /* 이미지가 보이는 영역 */
+.slide_wrapper {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
 }
-#slider .slider__inner {
-  /* 전체 이미지를 감싸고 있는 부모 : 움직이는 부분 속성주기 */
-  display: flex;
-  flex-wrap: wrap;
-  width: 10000; /* 스크립트로 처리할 것이므로 안깨지게 끔 width값 주면 됨 */
-  height: auto;
-  position: relative;
-  left: 0px; /* 슬라이더 초기값 */
-}
-#slider .slider img {
+.slides {
   position: absolute;
-  width: 100%;
+  top: 0;
+  overflow: hidden;
+}
+.slides.animated {
+  transition: 0.5s ease-out;
+}
+.slides li {
+  float: left;
+  width: 100vw;
   height: 100vh;
 }
-#slider .slider__inner.transition {
-  transition: all 0.3s;
-}
-#slider .slider {
-  /* 개별적인 이미지 (각각의 이미지 설정) */
-  position: relative;
+.slides li img {
   width: 100vw;
-  height: auto;
-}
-#slider .slider span {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.4);
-}
-#slider .slider__btn .prev {
-  left: 0;
-  background-image: url(./이미지/prev.png);
-  width: 86px;
-  height: 86px;
-  position: absolute;
-  margin-top: -150px;
-  z-index: 10;
-  cursor: pointer;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-#slider .slider__btn .next {
-  right: 0;
-  background-image: url(./이미지/next.png);
-  width: 86px;
-  height: 86px;
-  position: absolute;
-  margin-top: -150px;
-  z-index: 10;
-  cursor: pointer;
-  background-position: center;
-  background-repeat: no-repeat;
+  height: 100vh;
 }
 .pc {
   display: block;
 }
-.mobile {
+.mo {
   display: none;
+}
+.prev {
+  position: absolute;
+  left: 0px;
+  background-image: url(./이미지/prev.png);
+  top: 46%;
+  width: 86px;
+  height: 86px;
+  background-size: contain;
+  cursor: pointer;
+}
+.next {
+  position: absolute;
+  top: 46%;
+  width: 86px;
+  height: 86px;
+  background-size: contain;
+  right: 0px;
+  background-image: url(./이미지/next.png);
+  cursor: pointer;
 }
 /*banner*/
 #banner {
@@ -1042,7 +1020,7 @@ footer .btm .right p {
   .pc {
     display: none;
   }
-  .mobile {
+  .mo {
     display: block;
   }
   #news .list-split li {

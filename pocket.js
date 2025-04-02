@@ -1,74 +1,85 @@
-//슬라이더
-const sliderWrap = document.querySelector(".slider__wrap"); //전체 이미지 슬라이드
-const sliderImg = document.querySelector(".slider__img"); //보여지는 영역
-const sliderInner = document.querySelector(".slider__inner"); //움직이는 영역
-const slider = document.querySelectorAll(".slider"); //이미지
-const sliderBtn = document.querySelector(".slider__btn"); //버튼
-const sliderBtnPrev = document.querySelector(".slider__btn .prev"); //왼쪽 버튼
-const sliderBtnNext = document.querySelector(".slider__btn .next"); //오른쪽 버튼
-let currentIndex = 0, //현재 이미지
-  sliderLength = slider.length, //슬라이더 총 길이
-  sliderWidth = slider[0].offsetWidth, //슬라이더 가로 값
-  sliderFirst = slider[0], //첫번째 이미지
-  sliderLast = slider[sliderLength - 1], //마지막 이미지
-  cloneFirst = sliderFirst.cloneNode(true), //첫번째 이미지 복사
-  cloneLast = sliderLast.cloneNode(true); //마지막 이미지 복사
-sliderInner.appendChild(cloneFirst);
-sliderInner.insertBefore(cloneLast, sliderFirst);
-//매개변수 사용 - 5번 슬라이트 이펙트 보다 세분화 시키기
-function gotoSlider(direction) {
-  sliderInner.classList.add("transition");
-  // 슬라이드 버튼 연속으로 누를 수 없게 하기 02
-  sliderBtn.classList.add("disable");
+let slides = document.querySelector(".slides"),
+  slide = document.querySelectorAll(".slides li"),
+  currentIdx = 0,
+  slideCount = slide.length,
+  slideWidth = window.innerWidth,
+  prevBtn = document.querySelector(".prev"),
+  nextBtn = document.querySelector(".next");
 
-  posInital = sliderInner.offsetLeft;
-  // console.log(posInital);
+makeClone();
 
-  //direction이라는 매개변수에 -1이 들어온다면 왼쪽으로 이동(이전) 또한 1이라면 오른쪽으로 이동(다음)
-  if (direction == -1) {
-    // sliderInner.style.left = "800px"; //왼쪽으로 800만큼 움직이기
-    //부모박스 offsetLeft값을 구하여 더하는 이유는? sliderWidth는 슬라이더 하나만의 가로값이기 때문에 이동시 늘어나거나 줄어드는 값을 구할 수 없다 때문에 그 슬라이더를 감싸는 부모박스의 가로값을 구하여 늘어나는 값 만큼 길이를 더하여 추가시킨 것 이다.
-    sliderInner.style.left = posInital + sliderWidth + "px"; //왼쪽으로 슬라이더 가로값만큼 움직이기. 슬라이더의 부모박스의 왼쪽값을 더한 이유는?
-    currentIndex--;
-  } else if (direction == 1) {
-    // sliderInner.style.left = "-800px";
-    sliderInner.style.left = posInital - sliderWidth + "px";
-    currentIndex++;
+function makeClone() {
+  for (let i = 0; i < slideCount; i++) {
+    let cloneSlide = slide[i].cloneNode(true);
+    cloneSlide.classList.add("clone");
+    slides.appendChild(cloneSlide);
+  }
+  //index 번호 4번은 슬라이드 05임
+  //  slideCount -1 초기값
+  for (let i = slideCount - 1; i >= 0; i--) {
+    let cloneSlide = slide[i].cloneNode(true);
+    cloneSlide.classList.add("clone");
+    // 원래 있던 내용 앞에 추가해야함(요소의 앞)
+    slides.prepend(cloneSlide);
+  }
+
+  updateWidth();
+  setinit();
+  setTimeout(function () {
+    slides.classList.add("animated");
+  }, 100);
+}
+
+// 전체 너비를 구해서 ul의 너비를 지정하는 함수
+function updateWidth() {
+  let currentSlides = document.querySelectorAll(".slides li");
+  let newSlideCount = currentSlides.length;
+
+  let newWidth = slideWidth * newSlideCount + "px";
+  slides.style.width = newWidth;
+}
+
+//초기 위치 잡는 함수
+function setinit() {
+  // 왼쪽으로 움직일거니까 ( - )붙임
+  // 이동할 변수
+  let TranslateValue = -slideWidth * slideCount;
+  slides.style.transform = "translateX(" + TranslateValue + "px)";
+}
+
+nextBtn.addEventListener("click", function () {
+  // 지금 보고있는 슬라이드 수 +1 로 이동
+  moveSlide(currentIdx + 1);
+});
+prevBtn.addEventListener("click", function () {
+  // 지금 보고있는 슬라이드 수 +1 로 이동
+  moveSlide(currentIdx - 1);
+});
+
+// 숫자가 넘어와야 함수가 작동 하도럭
+// next 누를수록 왼쪽으로 translate left 값이 거리만큼 이동해야함
+// 전체가 슬라이드 너비+여백 만큼 이동해야지?
+function moveSlide(num) {
+  // 원래는 0이었는데 사용자가 이동하면 index가 1로 바뀌어있어야 함
+  slides.style.left = -num * slideWidth + "px";
+  //이동한 다음에는 currentIdx를 반드시 슬라이드가 최종적으로 보고있는 num 숫자만큼 바껴있어야 함.
+  currentIdx = num;
+  console.log(currentIdx, slideCount);
+  // 마지막이면 1번으로 다시 돌리기
+
+  if (currentIdx == slideCount || currentIdx == -slideCount) {
+    setTimeout(function () {
+      slides.classList.remove("animated");
+      slides.style.left = "0px";
+      currentIdx = 0;
+    }, 500);
+
+    setTimeout(function () {
+      slides.classList.add("animated");
+    }, 600);
   }
 }
 
-// 순간이동 이미지 슬라이드 (무한 슬라이드)
-function checkIndex() {
-  //슬라이드가 끝나면 transition 클래스를 다시 지워서 transition효과가 나오지 않도록 하고 이미지 순간이동 시키기
-  sliderInner.classList.remove("transition");
-  // console.log(currentIndex);
-
-  if (currentIndex == sliderLength) {
-    sliderInner.style.left = -(1 * sliderWidth) + "px";
-    currentIndex = 0;
-  }
-
-  if (currentIndex == -1) {
-    sliderInner.style.left = -(sliderLength * sliderWidth) + "px";
-    currentIndex = sliderLength - 1;
-  }
-}
-
-//실행문
-sliderBtnPrev.addEventListener("click", () => {
-  gotoSlider(-1); //매개변수 direction에 값 주기
-  setTimeout(() => {
-    sliderBtn.classList.remove("disable");
-  }, 1000);
-});
-sliderBtnNext.addEventListener("click", () => {
-  gotoSlider(1); //매개변수 direction에 값 주기
-  setTimeout(() => {
-    sliderBtn.classList.remove("disable");
-  }, 1000);
-});
-// 트렌지션 이벤트가 끝났을 때 일어나는 이벤트
-sliderInner.addEventListener("transitionend", checkIndex);
 //포토폴리오 팝업
 
 // 쿠키 가져오기
