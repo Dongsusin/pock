@@ -195,7 +195,7 @@ main {
   /* 전체 이미지를 감싸고 있는 부모 : 움직이는 부분 속성주기 */
   display: flex;
   flex-wrap: wrap;
-  width: 10000px; /* 스크립트로 처리할 것이므로 안깨지게 끔 width값 주면 됨 */
+  width: 10000; /* 스크립트로 처리할 것이므로 안깨지게 끔 width값 주면 됨 */
   height: auto;
   position: relative;
   left: 0px; /* 슬라이더 초기값 */

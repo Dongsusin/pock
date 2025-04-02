@@ -36,6 +36,7 @@ function gotoSlider(direction) {
     currentIndex++;
   }
 }
+
 // 순간이동 이미지 슬라이드 (무한 슬라이드)
 function checkIndex() {
   //슬라이드가 끝나면 transition 클래스를 다시 지워서 transition효과가 나오지 않도록 하고 이미지 순간이동 시키기
@@ -52,23 +53,24 @@ function checkIndex() {
     currentIndex = sliderLength - 1;
   }
 }
+
 //실행문
 sliderBtnPrev.addEventListener("click", () => {
   gotoSlider(-1); //매개변수 direction에 값 주기
   setTimeout(() => {
     sliderBtn.classList.remove("disable");
-  }, 300);
+  }, 1000);
 });
 sliderBtnNext.addEventListener("click", () => {
   gotoSlider(1); //매개변수 direction에 값 주기
   setTimeout(() => {
     sliderBtn.classList.remove("disable");
-  }, 300);
+  }, 1000);
 });
 // 트렌지션 이벤트가 끝났을 때 일어나는 이벤트
 sliderInner.addEventListener("transitionend", checkIndex);
-
 //포토폴리오 팝업
+
 // 쿠키 가져오기
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -130,4 +132,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.body.append(overlay, popup);
   }
+});
+$(document).ready(function () {
+  // 더블 클릭 방지 기능을 추가할 요소를 선택합니다.
+  // 예를 들어, 버튼에 대한 더블 클릭 방지 기능을 추가하려면 아래와 같이 작성할 수 있습니다.
+  $("button").on("dblclick", function (e) {
+    // 더블 클릭 이벤트를 취소합니다.
+    e.preventDefault();
+  });
 });
