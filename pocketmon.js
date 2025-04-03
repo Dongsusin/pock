@@ -1,12 +1,14 @@
-//visual
-let slides = document.querySelector(".slides"),
-  slide = document.querySelectorAll(".slides li"),
-  currentIdx = 0,
-  slideCount = slide.length,
-  slideWidth = window.innerWidth,
-  prevBtn = document.querySelector(".prev"),
-  nextBtn = document.querySelector(".next");
+//슬라이더
+let slides = document.querySelector(".slides"), //s슬라이더 전체
+  slide = document.querySelectorAll(".slides li"), //슬라이더 1페이지
+  currentIdx = 0, //현재 페이지
+  slideCount = slide.length, //슬라이더 갯수
+  slideWidth = window.innerWidth, //슬라이더 크기
+  prevBtn = document.querySelector(".prev"), //이전 페이지 버튼
+  nextBtn = document.querySelector(".next"); //다음 페이지 버튼
+
 makeClone();
+//슬라이더 복제본 생성
 function makeClone() {
   for (let i = 0; i < slideCount; i++) {
     let cloneSlide = slide[i].cloneNode(true);
@@ -24,6 +26,7 @@ function makeClone() {
     slides.classList.add("animated");
   }, 100);
 }
+//슬라이더 길이 계산
 function updateWidth() {
   let currentSlides = document.querySelectorAll(".slides li");
   let newSlideCount = currentSlides.length;
@@ -31,16 +34,20 @@ function updateWidth() {
   let newWidth = slideWidth * newSlideCount + "px";
   slides.style.width = newWidth;
 }
+//슬라이더 위치치 초기화
 function setinit() {
   let TranslateValue = -slideWidth * slideCount;
   slides.style.transform = "translateX(" + TranslateValue + "px)";
 }
+//다음 페이지 버튼 클릭
 nextBtn.addEventListener("click", function () {
   moveSlide(currentIdx + 1);
 });
+//이전 페이지 버튼 클릭
 prevBtn.addEventListener("click", function () {
   moveSlide(currentIdx - 1);
 });
+//페이지 이동동
 function moveSlide(num) {
   slides.style.left = -num * slideWidth + "px";
   currentIdx = num;
@@ -51,30 +58,33 @@ function moveSlide(num) {
       slides.style.left = "0px";
       currentIdx = 0;
     }, 500);
-
     setTimeout(function () {
       slides.classList.add("animated");
     }, 600);
   }
 }
+//페이지 자동이동
+setInterval(sliderEffect, 8000);
 function sliderEffect() {
   moveSlide(currentIdx + 1);
 }
-setInterval(sliderEffect, 8000);
-//scroll header hide
+//스크롤시 헤더 숨김
 var didScroll;
 var lastScrollTop = 0;
 var delta = 5;
 var navbarHeight = $("header").outerHeight();
+//스크롤 확인
 $(window).scroll(function (event) {
   didScroll = true;
 });
+//헤더 크기 계산
 setInterval(function () {
   if (didScroll) {
     hasScrolled();
     didScroll = false;
   }
 }, 250);
+//스크롤시 헤더에 nav class 추가
 function hasScrolled() {
   var st = $(this).scrollTop();
   if (Math.abs(lastScrollTop - st) <= delta) return;
@@ -87,7 +97,7 @@ function hasScrolled() {
   }
   lastScrollTop = st;
 }
-//pop up
+//팝업창
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
