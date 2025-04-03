@@ -79,7 +79,10 @@ function moveSlide(num) {
     }, 600);
   }
 }
-
+function sliderEffect() {
+  moveSlide(currentIdx + 1);
+}
+setInterval(sliderEffect, 8000);
 //포토폴리오 팝업
 
 // 쿠키 가져오기
